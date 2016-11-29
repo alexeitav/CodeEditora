@@ -1,27 +1,27 @@
-# Laravel PHP Framework
+# Notas para o Tutor
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Fase 02: FORM REQUEST E AUTORIZAÇAO
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+>> Relaçao Livro/Autor
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+Como nao foi detalhada a forma que deveria ser feita a relaçao entre livro/autor eu escolhi fazer da seguinte forme:
 
-## Official Documentation
+Alterei a tabela "books", acrescentando um campo "user_id" e relacionando esse campo com "users".
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+Outra opçao que pensei seria criar uma nova tabela "book_user", mas acabei achando mais facil fazer da primeira foram.
 
-## Contributing
+>> Autorizaçao do usuario para editar o livro
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+Como ainda nao temos os perfis de usuario (admin, editor, etc)...eu optei fazer da seguinte forma.
 
-## Security Vulnerabilities
+Quando um livro eh criado ja eh inserido o user_id do usuario que esta logado criando o livro.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Na listagem dos livros o usuario so pode ver seus proprios livros. Livros de outros autores ele nao ve na relaçao. (quando tivermos um admin ai eu daria permissao para o admin ver/editar todos).
 
-## License
+Ao editar um livro eu verifiquei se o "user_id" do livro eh igual ao id do usuario logado, se nao for gera um erro. Por segurança coloquei a mesma verificaçao na hora de deletar um livro.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+Sei que tem outras formas de fazer isso mas acabei optando por essa. Nao sei se foi melhor assim ou nao.
+
+
+P.S. Desculpe a falta de acentuaçao...nao sei porque o PHPStorm nao esta mais colocando acentuaçao.
+

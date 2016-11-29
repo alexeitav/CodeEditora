@@ -34,7 +34,8 @@ $factory->define(\App\Book::class, function(Faker\Generator $faker) {
     return [
         'title' => $faker->unique()->word(),
         'subtitle' => $faker->unique()->word(),
-        'price' => $faker->randomFloat(2, 5, 25)
+        'price' => $faker->randomFloat(2, 5, 25),
+        'user_id' => 1,
 
     ];
 });

@@ -9,7 +9,9 @@ class Book extends Model
     protected $fillable = [
         'title',
         'subtitle',
-        'price'
+        'price',
+        'user_id'
+
     ];
 
     public function setTitleAttribute($value)
@@ -26,6 +28,11 @@ class Book extends Model
         $value = strtolower($value);
         $this->attributes['subtitle'] = ucwords($value);
 
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 
 }

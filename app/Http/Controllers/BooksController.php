@@ -6,9 +6,12 @@ use App\Book;
 use App\Http\Requests\BookRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BooksController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +20,8 @@ class BooksController extends Controller
     public function index()
     {
 
-        $books = Book::query()->paginate(15);
+        //$books = Book::query()->paginate(15);
+        $books = Book::where('user_id', Auth::user()->id)->paginate(15);
         return view('books.index', compact('books'));
 
     }
@@ -40,7 +44,14 @@ class BooksController extends Controller
      */
     public function store(BookRequest $request)
     {
-        Book::create($request->all());
+        //Book::create($request->all());
+        $input = $request->all();
+        Book::create([
+            'title' => $input['title'],
+            'subtitle' => $input['subtitle'],
+            'price' => $input['price'],
+            'user_id' => Auth::user()->id,
+        ]);
         return redirect()->route('books.index');
     }
 
@@ -53,6 +64,10 @@ class BooksController extends Controller
      */
     public function edit(Book $book)
     {
+
+        if($book->user_id != Auth::user()->id) {
+            throw new ModelNotFoundException('Voce nao e o autor desse livro.');
+        }
 
         return view('books.edit', compact('book'));
 
@@ -67,6 +82,9 @@ class BooksController extends Controller
      */
     public function update(BookRequest $request, Book $book)
     {
+        if($book->user_id != Auth::user()->id) {
+            throw new ModelNotFoundException('Voce nao e o autor desse livro.');
+        }
 
         $book->fill($request->all());
         $book->save();
@@ -82,6 +100,10 @@ class BooksController extends Controller
      */
     public function destroy(Book $book)
     {
+        if($book->user_id != Auth::user()->id) {
+            throw new ModelNotFoundException('Voce nao e o autor desse livro.');
+        }
+
         $book->delete();
         return redirect()->back();
     }
@@ -89,6 +111,10 @@ class BooksController extends Controller
 
     public function delete(Book $book)
     {
+
+        if($book->user_id != Auth::user()->id) {
+            throw new ModelNotFoundException('Voce nao e o autor desse livro.');
+        }
 
         return view('books.modal.delete', compact('book'));
 
