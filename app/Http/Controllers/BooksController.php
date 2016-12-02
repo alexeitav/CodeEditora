@@ -52,7 +52,9 @@ class BooksController extends Controller
             'price' => $input['price'],
             'user_id' => Auth::user()->id,
         ]);
-        return redirect()->route('books.index');
+        $url = $request->get('redirect_to', route('books.index'));
+        $request->session()->flash('message', 'Livro cadastrado com sucesso');
+        return redirect()->to($url);
     }
 
 
@@ -88,7 +90,9 @@ class BooksController extends Controller
 
         $book->fill($request->all());
         $book->save();
-        return redirect()->route('books.index');
+        $url = $request->get('redirect_to', route('books.index'));
+        $request->session()->flash('message', 'Livro cadastrado com sucesso');
+        return redirect()->to($url);
 
     }
 
@@ -105,6 +109,7 @@ class BooksController extends Controller
         }
 
         $book->delete();
+        session()->flash('message', 'Livro excluido com sucesso');
         return redirect()->back();
     }
 

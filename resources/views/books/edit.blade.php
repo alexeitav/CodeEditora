@@ -12,7 +12,7 @@
                 @include('books.partials.form_books')
 
                 {!! Html::openFormGroup() !!}
-                {!! Form::submit('Salvar', ['class'=>'btn btn-primary']) !!}
+                    {!! Button::primary('Salvar')->submit() !!}
                 {!! Html::closeFormGroup() !!}
 
             {!! Form::close() !!}

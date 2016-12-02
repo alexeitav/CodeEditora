@@ -11,7 +11,7 @@
                 @include('books.partials.form_books')
 
                 {!! Html::openFormGroup() !!}
-                    {!! Form::submit('Criar', ['class'=>'btn btn-primary']) !!}
+                    {!! Button::primary('Criar')->submit() !!}
                 {!! Html::closeFormGroup() !!}
 
             {!! Form::close() !!}

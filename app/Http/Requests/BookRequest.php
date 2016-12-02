@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class BookRequest extends FormRequest
 {
@@ -23,6 +24,8 @@ class BookRequest extends FormRequest
      */
     public function rules()
     {
+        //$book = $this->route('book');
+
         return [
             'title' => 'required|min:3|max:255',
             'subtitle' => 'required|min:3|max:255',

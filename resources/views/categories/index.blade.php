@@ -5,10 +5,11 @@
 
         <div class="row">
             <h3>Listagem de categorias</h3>
-            <a href="{{ route('categories.create') }}" class="btn btn-primary">Nova Categoria</a>
+            {!! Button::primary('Nova Categoria')->asLinkTo(route('categories.create')) !!}
         </div>
 
         <div class="row">
+
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -26,7 +27,7 @@
                         <td>
                             <div class="btn-group" role="group">
                                 <a class="btn btn-primary btn-xs" href="{{route('categories.edit',['category'=>$category->id])}}">Editar</a>
-                                <a class="btn btn-danger btn-xs" href="{{route('categories.edit',['category'=>$category->id])}}">Editar</a>
+                                <a class="btn btn-danger btn-xs" href="{{route('categories.delete',['category'=>$category->id])}}" data-toggle="modal" data-target="#myModal">Excluir</a>
                             </div>
                         </td>
                     </tr>

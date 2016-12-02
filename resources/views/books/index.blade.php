@@ -5,10 +5,13 @@
 
         <div class="row">
             <h3>Listagem de livros</h3>
-            <a href="{{ route('books.create') }}" class="btn btn-primary">Novo Livro</a>
+            {!! Button::primary('Nova Categoria')->asLinkTo(route('books.create')) !!}
         </div>
 
         <div class="row">
+
+
+
             <table class="table table-striped">
                 <thead>
                 <tr>
