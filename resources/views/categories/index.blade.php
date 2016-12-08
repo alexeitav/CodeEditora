@@ -5,7 +5,19 @@
 
         <div class="row">
             <h3>Listagem de categorias</h3>
-            {!! Button::primary('Nova Categoria')->asLinkTo(route('categories.create')) !!}
+            <div class="input-group">
+                {!! Form::model(compact('search'), ['class'=>'form-inline', 'method' => 'GET']) !!}
+                {!! Html::openFormGroup('title', $errors) !!}
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        {!! Button::primary('Nova Categoria')->asLinkTo(route('categories.create')) !!}
+                        {!! Button::success('Buscar')->submit() !!}
+                    </div>
+                    {!! Form::text('search',null, ['class'=>'form-control', 'placeholder'=>'pesquisar']) !!}
+                </div>
+                {!! Html::closeFormGroup() !!}
+            </div>
+
         </div>
 
         <div class="row">

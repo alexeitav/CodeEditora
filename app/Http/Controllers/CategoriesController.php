@@ -1,24 +1,35 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace CodePub\Http\Controllers;
 
-use App\Category;
-use App\Http\Requests\CategoryRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use CodePub\Http\Requests\CategoryRequest;
+use CodePub\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
     /**
+     * @var CategoryRepository
+     */
+    private $repository;
+
+    function __construct(CategoryRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $categories = Category::query()->paginate(15);
-        return view('categories.index', compact('categories'));
+        $search = $request->get('search');
+        $categories = $this->repository->paginate(10);
+        return view('categories.index', compact('categories', 'search'));
 
     }
 
@@ -40,7 +51,8 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create($request->all());
+
+        $this->repository->create($request->all());
         $url = $request->get('redirect_to', route('categories.index'));
         $request->session()->flash('message', 'Categoria cadastrada com sucesso');
         return redirect()->to($url);
@@ -53,9 +65,10 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
 
+        $category = $this->repository->find($id);
         return view('categories.edit', compact('category'));
 
     }
@@ -67,11 +80,10 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, Category $category)
+    public function update(CategoryRequest $request, $id)
     {
 
-        $category->fill($request->all());
-        $category->save();
+        $this->repository->update($request->all(), $id);
         $url = $request->get('redirect_to', route('categories.index'));
         $request->session()->flash('message', 'Categoria cadastrada com sucesso');
         return redirect()->to($url);
@@ -84,17 +96,18 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        $category->delete();
+        $this->repository->delete($id);
         session()->flash('message', 'Categoria excluida com sucesso');
         return redirect()->back();
     }
 
 
-    public function delete(Category $category)
+    public function delete($id)
     {
 
+        $category = $this->repository->find($id);
         return view('categories.modal.delete', compact('category'));
 
     }

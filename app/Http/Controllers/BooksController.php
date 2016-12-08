@@ -1,15 +1,25 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace CodePub\Http\Controllers;
 
-use App\Book;
-use App\Http\Requests\BookRequest;
+use CodePub\Http\Requests\BookRequest;
+use CodePub\Repositories\BookRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class BooksController extends Controller
 {
+    /**
+     * @var BookRepository
+     */
+    private $repository;
+
+    function __construct(BookRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
 
     /**
@@ -17,12 +27,14 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        //$books = Book::query()->paginate(15);
-        $books = Book::where('user_id', Auth::user()->id)->paginate(15);
-        return view('books.index', compact('books'));
+        $search = $request->get('search');
+        //$this->repository->pushCriteria(new FindByAuthorCriteria());
+        $books = $this->repository->paginate(10);
+
+        return view('books.index', compact('books', 'search'));
 
     }
 
@@ -44,14 +56,15 @@ class BooksController extends Controller
      */
     public function store(BookRequest $request)
     {
-        //Book::create($request->all());
+
         $input = $request->all();
-        Book::create([
+        $this->repository->create([
             'title' => $input['title'],
             'subtitle' => $input['subtitle'],
             'price' => $input['price'],
-            'user_id' => Auth::user()->id,
+            'author_id' => Auth::user()->id,
         ]);
+
         $url = $request->get('redirect_to', route('books.index'));
         $request->session()->flash('message', 'Livro cadastrado com sucesso');
         return redirect()->to($url);
@@ -64,11 +77,15 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Book $book)
+    public function edit($id)
     {
 
-        if($book->user_id != Auth::user()->id) {
-            throw new ModelNotFoundException('Voce nao e o autor desse livro.');
+        $book = $this->repository->find($id);
+
+        if($book->author_id != Auth::user()->id) {
+            //throw new ModelNotFoundException('Voce nao e o autor desse livro.');
+            Session::flash('message', 'Voce nao e o autor desse livro');
+            return redirect()->back();
         }
 
         return view('books.edit', compact('book'));
@@ -82,9 +99,11 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BookRequest $request, Book $book)
+    public function update(BookRequest $request, $id)
     {
-        if($book->user_id != Auth::user()->id) {
+        $book = $this->repository->find($id);
+
+        if($book->author_id != Auth::user()->id) {
             throw new ModelNotFoundException('Voce nao e o autor desse livro.');
         }
 
@@ -102,9 +121,12 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Book $book)
+    public function destroy($id)
     {
-        if($book->user_id != Auth::user()->id) {
+
+        $book = $this->repository->find($id);
+
+        if($book->author_id != Auth::user()->id) {
             throw new ModelNotFoundException('Voce nao e o autor desse livro.');
         }
 
@@ -114,11 +136,14 @@ class BooksController extends Controller
     }
 
 
-    public function delete(Book $book)
+    public function delete($id)
     {
 
-        if($book->user_id != Auth::user()->id) {
+        $book = $this->repository->find($id);
+
+        if($book->author_id != Auth::user()->id) {
             throw new ModelNotFoundException('Voce nao e o autor desse livro.');
+
         }
 
         return view('books.modal.delete', compact('book'));

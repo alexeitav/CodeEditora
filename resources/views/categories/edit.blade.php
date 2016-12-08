@@ -4,7 +4,7 @@
     <div class="container">
 
         <div class="row">
-            <h3>Nova categoria</h3>
+            <h3>Editar categoria</h3>
             {{--@include('errors._errors_form')--}}
 
             {!! Form::model($category, ['route'=>['categories.update', 'category'=>$category->id], 'class'=>'form', 'method'=>'PUT']) !!}
