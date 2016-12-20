@@ -48,6 +48,25 @@ Route::group(['middleware'=>'auth'], function(){
 
     });
 
+    Route::group(['prefix' => 'trashed', 'as' => 'trashed.'], function() {
+
+        Route::group(['prefix' => 'books', 'as' => 'books.'], function() {
+            Route::get('', ['as'=>'index', 'uses'=>'BooksTrashedController@index']);
+            Route::get('{book}/show', ['as'=>'show', 'uses'=>'BooksTrashedController@show']);
+            Route::get('{book}/undelete', ['as'=>'undelete', 'uses'=>'BooksTrashedController@undelete']);
+            Route::get('{book}/restore', ['as'=>'restore', 'uses'=>'BooksTrashedController@restore']);
+        });
+
+        Route::group(['prefix' => 'categories', 'as' => 'categories.'], function() {
+            Route::get('', ['as'=>'index', 'uses'=>'CategoriesTrashedController@index']);
+            Route::get('{category}/undelete', ['as'=>'undelete', 'uses'=>'CategoriesTrashedController@undelete']);
+            Route::get('{category}/restore', ['as'=>'restore', 'uses'=>'CategoriesTrashedController@restore']);
+        });
+
+    });
+
+
+
 
 
 });

@@ -26,14 +26,35 @@
             $navbar = Navbar::withBrand(config('app.name'), url('/'))->inverse();
             if(Auth::check()){
                 $links = Navigation::links([
+
                     [
-                        'link' => route('categories.index'),
-                        'title' => 'Categorias'
+                            'Categorias',
+                            [
+                                    [
+                                            'link' => route('categories.index'),
+                                            'title' => 'Listar'
+                                    ],
+                                    [
+                                            'link' => route('trashed.categories.index'),
+                                            'title' => 'Lixeira'
+                                    ]
+                            ]
+
                     ],
                     [
-                            'link' => route('books.index'),
-                            'title' => 'Livros'
-                    ]
+                        'Livro',
+                        [
+                                [
+                                        'link' => route('books.index'),
+                                        'title' => 'Listar'
+                                ],
+                                [
+                                        'link' => route('trashed.books.index'),
+                                        'title' => 'Lixeira'
+                                ]
+                        ]
+
+                    ],
                 ]);
                 $logout = Navigation::links([
                     [

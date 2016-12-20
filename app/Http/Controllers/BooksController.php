@@ -4,6 +4,7 @@ namespace CodePub\Http\Controllers;
 
 use CodePub\Http\Requests\BookRequest;
 use CodePub\Repositories\BookRepository;
+use CodePub\Repositories\CategoryRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +16,15 @@ class BooksController extends Controller
      * @var BookRepository
      */
     private $repository;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
-    function __construct(BookRepository $repository)
+    function __construct(BookRepository $repository, CategoryRepository $categoryRepository)
     {
         $this->repository = $repository;
+        $this->categoryRepository = $categoryRepository;
     }
 
 
@@ -45,7 +51,8 @@ class BooksController extends Controller
      */
     public function create()
     {
-        return view('books.create');
+        $categories = $this->categoryRepository->lists('name', 'id'); //pluck
+        return view('books.create', compact('categories'));
     }
 
     /**
@@ -58,11 +65,13 @@ class BooksController extends Controller
     {
 
         $input = $request->all();
+
         $this->repository->create([
             'title' => $input['title'],
             'subtitle' => $input['subtitle'],
             'price' => $input['price'],
             'author_id' => Auth::user()->id,
+            'categories' => $input['categories'],
         ]);
 
         $url = $request->get('redirect_to', route('books.index'));
@@ -81,6 +90,8 @@ class BooksController extends Controller
     {
 
         $book = $this->repository->find($id);
+        $this->categoryRepository->withTrashed();
+        $categories = $this->categoryRepository->listsWithMutators('name_trashed', 'id'); //pluck
 
         if($book->author_id != Auth::user()->id) {
             //throw new ModelNotFoundException('Voce nao e o autor desse livro.');
@@ -88,7 +99,7 @@ class BooksController extends Controller
             return redirect()->back();
         }
 
-        return view('books.edit', compact('book'));
+        return view('books.edit', compact('book', 'categories'));
 
     }
 
@@ -107,8 +118,8 @@ class BooksController extends Controller
             throw new ModelNotFoundException('Voce nao e o autor desse livro.');
         }
 
-        $book->fill($request->all());
-        $book->save();
+        $this->repository->update($request->all(), $id);
+
         $url = $request->get('redirect_to', route('books.index'));
         $request->session()->flash('message', 'Livro cadastrado com sucesso');
         return redirect()->to($url);
