@@ -1,0 +1,20 @@
+{
+    "name": "MeuTeste",
+    "alias": "meuteste",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "\\MeuTeste\\Providers\\MeuTesteServiceProvider"
+    ],
+    "aliases":{},
+    "files": [
+        "start.php"
+    ],
+  "migration": {
+    "seeds": [
+      "MeuTesteDatabaseSeeder"
+    ]
+  }
+}
