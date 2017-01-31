@@ -24,7 +24,6 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
 
-        $this->app->bind(\CodePub\Repositories\UserRepository::class, \CodePub\Repositories\UserRepositoryEloquent::class);
         //:end-bindings:
     }
 }

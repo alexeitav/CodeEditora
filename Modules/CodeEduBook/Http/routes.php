@@ -1,7 +1,7 @@
 <?php
 
 
-Route::group(['middleware'=>'auth'], function(){
+Route::group(['middleware'=>['auth', config('codeeduuser.middleware.isVerified')]], function(){
 
     //Route::resource('categories', 'CategoriesController', ['except'=>'show, destroy']);
     Route::group(['prefix' => 'categories'], function() {

@@ -1,17 +1,24 @@
 <?php
 
-namespace CodePub\Repositories;
+namespace CodeEduUser\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
+use CodeEduUser\Models\Role;
 use Prettus\Repository\Criteria\RequestCriteria;
-use CodePub\Models\User;
+use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class UserRepositoryEloquent
  * @package namespace CodePub\Repositories;
  */
-class UserRepositoryEloquent extends BaseRepository implements UserRepository
+class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
 {
+
+    protected $fieldSearchable = [
+        'name' => 'like',
+        'description' => 'like',
+
+    ];
+
     /**
      * Specify Model class name
      *
@@ -19,7 +26,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function model()
     {
-        return User::class;
+        return Role::class;
     }
 
     

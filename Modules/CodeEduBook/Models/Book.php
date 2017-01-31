@@ -40,7 +40,7 @@ class Book extends Model implements TableInterface
 
     public function author()
     {
-        return $this->belongsTo('CodePub\Models\User');
+        return $this->belongsTo('CodeEduUser\Models\User');
     }
 
     public function categories()

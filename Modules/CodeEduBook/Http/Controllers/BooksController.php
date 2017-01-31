@@ -2,8 +2,8 @@
 
 namespace CodeEduBook\Http\Controllers;
 
-use CodePub\Http\Controllers\Controller;
-use CodeEduBook\Http\Requests\BookRequest;
+use CodeEduBook\Http\Requests\BookCreateRequest;
+use CodeEduBook\Http\Requests\BookUpdateRequest;
 use CodeEduBook\Repositories\BookRepository;
 use CodeEduBook\Repositories\CategoryRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -62,7 +62,7 @@ class BooksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BookRequest $request)
+    public function store(BookCreateRequest $request)
     {
 
         $input = $request->all();
@@ -111,13 +111,8 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BookRequest $request, $id)
+    public function update(BookUpdateRequest $request, $id)
     {
-        $book = $this->repository->find($id);
-
-        if($book->author_id != Auth::user()->id) {
-            throw new ModelNotFoundException('Voce nao e o autor desse livro.');
-        }
 
         $this->repository->update($request->all(), $id);
 

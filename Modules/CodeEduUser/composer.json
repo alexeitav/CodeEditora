@@ -1,0 +1,15 @@
+{
+    "name": "alexeitav/codeeduuser",
+    "description": "",
+    "authors": [
+        {
+            "name": "Alexei C Tavares",
+            "email": "alexei_tav@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CodeEduUser\\": ""
+        }
+    }
+}
